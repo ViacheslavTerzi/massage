@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Администратор — Колосов</title>
+  <style>
+    :root {
+      --black: #171717;
+      --dark:  #1f1f1f;
+      --gold:  #C9A84C;
+      --gold-l:#dfc378;
+      --green: #1E5E3A;
+      --cream: #f0ebe0;
+      --muted: #a89f94;
+      --red:   #c0392b;
+      --red-l: #e74c3c;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; background: var(--black); color: var(--cream); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .login-box {
+      border: 1px solid rgba(201,168,76,.25);
+      padding: 3rem 2.5rem;
+      width: 340px;
+      text-align: center;
+    }
+    .login-box h1 { font-size: 1.3rem; font-weight: 400; color: var(--gold); margin-bottom: .5rem; }
+    .login-box p  { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
+    .login-box input {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid rgba(201,168,76,.2);
+      color: var(--cream);
+      padding: .8rem 1rem;
+      font-size: 1.1rem;
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: .3em;
+      outline: none;
+      margin-bottom: 1rem;
+    }
+    .login-box input:focus { border-color: var(--gold); }
+    .btn-login {
+      width: 100%;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: .9rem;
+      font-size: .9rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s;
+    }
+    .btn-login:hover { background: var(--gold-l); }
+    .login-err { font-size: .82rem; color: var(--red-l); margin-top: .5rem; display: none; }
+
+    /* ── ADMIN APP ── */
+    #adminApp { display: none; }
+
+    header {
+      background: rgba(23,23,23,.95);
+      border-bottom: 1px solid rgba(201,168,76,.2);
+      padding: 0 5%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 { font-size: .95rem; font-weight: 400; color: var(--gold); letter-spacing: .1em; }
+    .header-links { display: flex; gap: 1.5rem; align-items: center; }
+    .header-links a { color: var(--muted); font-size: .82rem; text-decoration: none; transition: color .2s; }
+    .header-links a:hover { color: var(--gold); }
+    .btn-logout {
+      background: none;
+      border: 1px solid rgba(201,168,76,.3);
+      color: var(--muted);
+      padding: .3rem .9rem;
+      font-size: .78rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-logout:hover { border-color: var(--gold); color: var(--gold); }
+
+    main { padding: 2.5rem 5%; max-width: 1000px; margin: 0 auto; }
+
+    /* Month nav */
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .month-nav h2 { font-size: 1.3rem; font-weight: 400; color: var(--cream); }
+    .mnav-btn {
+      background: none;
+      border: 1px solid rgba(201,168,76,.3);
+      color: var(--gold);
+      width: 36px; height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .mnav-btn:hover { background: rgba(201,168,76,.12); }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .legend span { display: flex; align-items: center; gap: .4rem; }
+    .leg-dot {
+      width: 12px; height: 12px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .leg-free   { border-color: rgba(201,168,76,.4); background: transparent; }
+    .leg-booked { border-color: rgba(192,57,43,.5); background: rgba(192,57,43,.2); }
+
+    /* Calendar */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-dn {
+      text-align: center;
+      font-size: .7rem;
+      color: var(--muted);
+      padding: 6px 0;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .cal-day {
+      border: 1px solid rgba(201,168,76,.12);
+      padding: .5rem .3rem .3rem;
+      min-height: 80px;
+      cursor: pointer;
+      transition: border-color .2s;
+      position: relative;
+    }
+    .cal-day:hover:not(.cal-past) { border-color: rgba(201,168,76,.4); }
+    .cal-day.cal-past { opacity: .35; cursor: default; }
+    .cal-day.cal-today { border-color: rgba(201,168,76,.5); }
+    .cal-day.cal-sel   { border-color: var(--gold); background: rgba(201,168,76,.07); }
+    .cal-day-num {
+      font-size: .85rem;
+      color: var(--cream);
+      margin-bottom: .3rem;
+    }
+    .cal-day.cal-today .cal-day-num { color: var(--gold); }
+    .cal-mini-slots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+    .cms {
+      width: 8px; height: 8px;
+      border-radius: 1px;
+    }
+    .cms-free   { background: rgba(201,168,76,.35); }
+    .cms-booked { background: rgba(192,57,43,.6); }
+
+    /* Selected day panel */
+    #dayPanel {
+      margin-top: 2rem;
+      border: 1px solid rgba(201,168,76,.2);
+      padding: 1.5rem;
+      display: none;
+    }
+    #dayPanel h3 { font-size: 1rem; font-weight: 400; color: var(--gold); margin-bottom: 1.2rem; letter-spacing: .05em; }
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .slot-btn {
+      padding: .6rem .4rem;
+      text-align: center;
+      font-size: .88rem;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid rgba(201,168,76,.3);
+      background: transparent;
+      color: var(--cream);
+      transition: all .18s;
+    }
+    .slot-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .slot-btn.sb-booked {
+      background: rgba(192,57,43,.2);
+      border-color: rgba(192,57,43,.5);
+      color: var(--red-l);
+    }
+    .slot-btn.sb-booked:hover {
+      background: rgba(192,57,43,.35);
+      border-color: var(--red-l);
+    }
+    .panel-hint { font-size: .78rem; color: var(--muted); margin-top: 1rem; }
+
+    /* Bulk actions */
+    .bulk-actions { display: flex; gap: .6rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .bulk-btn {
+      padding: .4rem .9rem;
+      font-size: .78rem;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid rgba(201,168,76,.3);
+      background: transparent;
+      color: var(--muted);
+      transition: all .2s;
+      letter-spacing: .05em;
+    }
+    .bulk-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .bulk-btn.red { border-color: rgba(192,57,43,.4); }
+    .bulk-btn.red:hover { border-color: var(--red-l); color: var(--red-l); }
+
+    /* Stats */
+    .stats-bar {
+      display: flex;
+      gap: 2rem;
+      padding: 1rem 0;
+      border-top: 1px solid rgba(201,168,76,.1);
+      margin-top: 1.5rem;
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .stats-bar strong { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .cal-day { min-height: 54px; }
+      .cms { width: 6px; height: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>Панель управления</h1>
+    <p>Введите PIN-код для входа</p>
+    <input type="password" id="pinInput" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="btn-login" onclick="doLogin()">Войти</button>
+    <p class="login-err" id="loginErr">Неверный PIN</p>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+  <header>
+    <h1>⚙ Управление расписанием</h1>
+    <div class="header-links">
+      <a href="index.html">← Сайт</a>
+      <button class="btn-logout" onclick="logout()">Выйти</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="month-nav">
+      <button class="mnav-btn" id="mPrev">&#8249;</button>
+      <h2 id="mTitle"></h2>
+      <button class="mnav-btn" id="mNext">&#8250;</button>
+    </div>
+
+    <div class="legend">
+      <span><span class="leg-dot leg-free"></span>Свободно</span>
+      <span><span class="leg-dot leg-booked"></span>Занято</span>
+    </div>
+
+    <div class="cal-grid" id="adminCal"></div>
+
+    <div id="dayPanel">
+      <h3 id="panelTitle"></h3>
+      <div class="bulk-actions">
+        <button class="bulk-btn" onclick="bookAll()">Занять весь день</button>
+        <button class="bulk-btn red" onclick="freeAll()">Освободить всё</button>
+      </div>
+      <div class="slot-grid" id="slotGrid"></div>
+      <p class="panel-hint">Нажмите на время чтобы переключить статус</p>
+      <div class="stats-bar" id="statsBar"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+  /* ─── CONFIG ─── */
+  const ADMIN_PIN  = '1234';           // ← Смените PIN здесь
+  const HOURS = ['9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const DAYS   = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+  /* ─── AUTH ─── */
+  function doLogin() {
+    const pin = document.getElementById('pinInput').value;
+    if (pin === ADMIN_PIN) {
+      sessionStorage.setItem('adm_ok', '1');
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+      initAdmin();
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+      document.getElementById('pinInput').value = '';
+    }
+  }
+  function logout() {
+    sessionStorage.removeItem('adm_ok');
+    location.reload();
+  }
+  if (sessionStorage.getItem('adm_ok') === '1') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+  }
+
+  /* ─── DATA ─── */
+  function getBooked() {
+    try { return JSON.parse(localStorage.getItem('kolosov_booked') || '{}'); } catch { return {}; }
+  }
+  function saveBooked(data) { localStorage.setItem('kolosov_booked', JSON.stringify(data)); }
+
+  function isBooked(key, h) { return (getBooked()[key] || []).includes(h); }
+
+  function toggleSlot(key, h) {
+    const data = getBooked();
+    const arr  = data[key] || [];
+    if (arr.includes(h)) {
+      data[key] = arr.filter(x => x !== h);
+      if (!data[key].length) delete data[key];
+    } else {
+      data[key] = [...arr, h];
+    }
+    saveBooked(data);
+  }
+
+  /* ─── CALENDAR ─── */
+  let calYear, calMonth, selKey = '';
+
+  function dateKey(y, m, d) {
+    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+
+  function renderAdminCal() {
+    const grid  = document.getElementById('adminCal');
+    const title = document.getElementById('mTitle');
+    title.textContent = `${MONTHS[calMonth]} ${calYear}`;
+    grid.innerHTML = '';
+    const booked = getBooked();
+    const today  = new Date(); today.setHours(0,0,0,0);
+
+    DAYS.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dn'; el.textContent = d; grid.appendChild(el);
+    });
+
+    const firstDay  = new Date(calYear, calMonth, 1).getDay();
+    const offset    = (firstDay === 0) ? 6 : firstDay - 1;
+    const daysCount = new Date(calYear, calMonth + 1, 0).getDate();
+
+    for (let i = 0; i < offset; i++) grid.appendChild(document.createElement('div'));
+
+    for (let d = 1; d <= daysCount; d++) {
+      const key  = dateKey(calYear, calMonth, d);
+      const date = new Date(calYear, calMonth, d);
+      const el   = document.createElement('div');
+      el.className = 'cal-day';
+
+      const dayBooked = booked[key] || [];
+      const numEl = document.createElement('div');
+      numEl.className = 'cal-day-num';
+      numEl.textContent = d;
+      el.appendChild(numEl);
+
+      const miniWrap = document.createElement('div');
+      miniWrap.className = 'cal-mini-slots';
+      HOURS.forEach(h => {
+        const dot = document.createElement('div');
+        dot.className = 'cms ' + (dayBooked.includes(h) ? 'cms-booked' : 'cms-free');
+        miniWrap.appendChild(dot);
+      });
+      el.appendChild(miniWrap);
+
+      if (date < today) { el.classList.add('cal-past'); }
+      else {
+        if (date.toDateString() === today.toDateString()) el.classList.add('cal-today');
+        if (key === selKey) el.classList.add('cal-sel');
+        el.addEventListener('click', () => openDay(key, d));
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  /* ─── DAY PANEL ─── */
+  function openDay(key, d) {
+    selKey = key;
+    renderAdminCal();
+    const [y, m] = key.split('-');
+    document.getElementById('panelTitle').textContent =
+      `${d} ${MONTHS[parseInt(m,10)-1]} ${y}`;
+    renderSlots();
+    document.getElementById('dayPanel').style.display = 'block';
+    document.getElementById('dayPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function renderSlots() {
+    const grid = document.getElementById('slotGrid');
+    const booked = getBooked();
+    const dayBooked = booked[selKey] || [];
+    grid.innerHTML = '';
+    HOURS.forEach(h => {
+      const btn = document.createElement('button');
+      btn.className = 'slot-btn' + (dayBooked.includes(h) ? ' sb-booked' : '');
+      btn.textContent = dayBooked.includes(h) ? `${h} ✕` : h;
+      btn.addEventListener('click', () => {
+        toggleSlot(selKey, h);
+        renderSlots();
+        renderAdminCal();
+        updateStats();
+      });
+      grid.appendChild(btn);
+    });
+    updateStats();
+  }
+
+  function updateStats() {
+    const dayBooked = (getBooked()[selKey] || []);
+    const free = HOURS.length - dayBooked.length;
+    document.getElementById('statsBar').innerHTML =
+      `<span>Свободно: <strong>${free}</strong></span>` +
+      `<span>Занято: <strong>${dayBooked.length}</strong></span>` +
+      `<span>Всего: <strong>${HOURS.length}</strong></span>`;
+  }
+
+  function bookAll() {
+    const data = getBooked();
+    data[selKey] = [...HOURS];
+    saveBooked(data);
+    renderSlots();
+    renderAdminCal();
+  }
+  function freeAll() {
+    const data = getBooked();
+    delete data[selKey];
+    saveBooked(data);
+    renderSlots();
+    renderAdminCal();
+  }
+
+  /* ─── INIT ─── */
+  function initAdmin() {
+    const now = new Date();
+    calYear  = now.getFullYear();
+    calMonth = now.getMonth();
+    renderAdminCal();
+    document.getElementById('mPrev').addEventListener('click', () => {
+      const now = new Date();
+      const prev = new Date(calYear, calMonth - 1, 1);
+      if (prev >= new Date(now.getFullYear(), now.getMonth(), 1)) {
+        calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+        renderAdminCal();
+      }
+    });
+    document.getElementById('mNext').addEventListener('click', () => {
+      calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderAdminCal();
+    });
+  }
+
+  if (sessionStorage.getItem('adm_ok') === '1') initAdmin();
+</script>
+</body>
+</html>

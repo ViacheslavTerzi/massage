@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вячеслав Колосов — Сертифицированный массажист</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      --black:  #171717;
+      --dark:   #1f1f1f;
+      --gold:   #C9A84C;
+      --gold-light: #dfc378;
+      --green:  #1E5E3A;
+      --cream:  #f0ebe0;
+      --muted:  #a89f94;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: var(--black);
+      color: var(--cream);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(23,23,23,.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(201,168,76,.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+    }
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: .12em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--cream);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('IMG_7321.JPEG') center/cover no-repeat;
+      filter: brightness(.35);
+    }
+    .hero-content { position: relative; z-index: 1; padding: 0 1rem; }
+    .hero-eyebrow {
+      font-size: .8rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .hero-name {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: .06em;
+      color: var(--gold);
+      margin-bottom: .6rem;
+    }
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--cream);
+      letter-spacing: .1em;
+      margin-bottom: 2.8rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: .9rem 2.4rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: .85rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: background .25s, color .25s;
+    }
+    .btn:hover { background: var(--gold); color: var(--black); }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 5%; }
+
+    .section-label {
+      font-size: .75rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 2rem;
+    }
+    .divider {
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6%;
+      align-items: center;
+    }
+    .about-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: brightness(.9);
+    }
+    .about-text p { color: var(--muted); margin-bottom: 1.2rem; }
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: 2rem;
+    }
+    .badge {
+      border: 1px solid rgba(201,168,76,.4);
+      color: var(--gold);
+      padding: .4rem 1rem;
+      font-size: .78rem;
+      letter-spacing: .08em;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--black); text-align: center; }
+    #services .section-title, #services .section-label { text-align: left; }
+    #services .divider { margin-left: 0; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .service-card {
+      background: var(--dark);
+      border: 1px solid rgba(201,168,76,.15);
+      padding: 2.4rem 2rem;
+      text-align: left;
+      transition: border-color .25s;
+    }
+    .service-card:hover { border-color: var(--gold); }
+    .service-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .service-name {
+      font-size: 1.1rem;
+      color: var(--cream);
+      margin-bottom: .5rem;
+    }
+    .service-desc { font-size: .88rem; color: var(--muted); margin-bottom: 1.4rem; }
+    .service-price {
+      font-size: 1.3rem;
+      color: var(--gold);
+      letter-spacing: .05em;
+    }
+    .service-duration { font-size: .78rem; color: var(--muted); }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--dark); padding-bottom: 80px; }
+
+    .slider-wrap {
+      position: relative;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+    .slider-track {
+      display: flex;
+      gap: 12px;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .slider-track img {
+      flex: 0 0 calc((100% - 24px) / 3);
+      height: 480px;
+      object-fit: cover;
+      object-position: top;
+      filter: brightness(.88);
+      cursor: pointer;
+      user-select: none;
+      transition: filter .3s;
+    }
+    .slider-track img:hover { filter: brightness(1); }
+    .slider-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(23,23,23,.72);
+      border: 1px solid rgba(201,168,76,.4);
+      color: var(--gold);
+      width: 48px; height: 48px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+      z-index: 2;
+    }
+    .slider-btn:hover { background: rgba(201,168,76,.2); }
+    .slider-prev { left: .6rem; }
+    .slider-next { right: .6rem; }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: 1.2rem;
+    }
+    .slider-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(201,168,76,.3);
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .slider-dots span.active { background: var(--gold); }
+
+    /* Lightbox */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.93);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lb-img { max-width: 82vw; max-height: 90vh; object-fit: contain; }
+    #lb-close {
+      position: absolute;
+      top: 1.2rem; right: 1.8rem;
+      font-size: 2.2rem;
+      color: var(--cream);
+      cursor: pointer;
+      line-height: 1;
+      opacity: .8;
+    }
+    #lb-close:hover { opacity: 1; }
+    .lb-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(23,23,23,.6);
+      border: 1px solid rgba(201,168,76,.35);
+      color: var(--gold);
+      width: 52px; height: 52px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lb-nav:hover { background: rgba(201,168,76,.2); }
+    #lb-prev { left: 1.2rem; }
+    #lb-next { right: 1.2rem; }
+    .lb-counter {
+      position: absolute;
+      bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      font-size: .8rem;
+      letter-spacing: .15em;
+      color: rgba(240,235,224,.5);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6%;
+      align-items: start;
+    }
+    .contact-info p { color: var(--muted); margin-bottom: 2rem; }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      margin-bottom: 1.2rem;
+      color: var(--cream);
+      font-size: .95rem;
+    }
+    .contact-detail a { color: var(--cream); text-decoration: none; transition: color .2s; }
+    .contact-detail a:hover { color: var(--gold); }
+    .contact-icon {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(201,168,76,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    form label { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; display: block; }
+    form input, form textarea, form select {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid rgba(201,168,76,.2);
+      color: var(--cream);
+      padding: .8rem 1rem;
+      font-size: .95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .25s;
+    }
+    form input:focus, form textarea:focus, form select:focus { border-color: var(--gold); }
+    form select option { background: var(--dark); }
+    form textarea { height: 120px; resize: vertical; }
+    .btn-submit {
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 1rem;
+      font-size: .9rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .25s;
+      font-family: inherit;
+    }
+    .btn-submit:hover { background: var(--gold-light); }
+
+    /* ── CALENDAR ── */
+    .cal-wrap {
+      background: var(--black);
+      border: 1px solid rgba(201,168,76,.2);
+      padding: 1rem;
+      margin-top: .4rem;
+    }
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .9rem;
+    }
+    .cal-header span {
+      font-size: .9rem;
+      letter-spacing: .06em;
+      color: var(--cream);
+    }
+    .cal-nav {
+      background: none;
+      border: 1px solid rgba(201,168,76,.3);
+      color: var(--gold);
+      width: 28px; height: 28px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .cal-nav:hover { background: rgba(201,168,76,.15); }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .cal-dn {
+      text-align: center;
+      font-size: .68rem;
+      letter-spacing: .06em;
+      color: var(--muted);
+      padding: 4px 0;
+      text-transform: uppercase;
+    }
+    .cal-d {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .82rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all .18s;
+      position: relative;
+    }
+    .cal-d:hover:not(.cal-past):not(.cal-sel) { border-color: var(--gold); color: var(--gold); }
+    .cal-d.cal-today { color: var(--gold); }
+    .cal-d.cal-sel { background: var(--gold); color: var(--black); font-weight: bold; }
+    .cal-d.cal-past { color: rgba(168,159,148,.25); cursor: not-allowed; }
+    .cal-d.cal-full::after {
+      content: '';
+      position: absolute;
+      bottom: 3px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #e05555;
+    }
+
+    /* Time slots */
+    .time-wrap { margin-top: 1rem; }
+    .time-wrap label { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: .6rem; }
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .time-slot {
+      padding: .5rem .3rem;
+      text-align: center;
+      font-size: .85rem;
+      border: 1px solid rgba(201,168,76,.2);
+      cursor: pointer;
+      transition: all .18s;
+      color: var(--cream);
+    }
+    .time-slot:hover:not(.ts-booked) { border-color: var(--gold); color: var(--gold); }
+    .time-slot.ts-sel { background: var(--gold); color: var(--black); border-color: var(--gold); }
+    .time-slot.ts-booked {
+      color: rgba(168,159,148,.3);
+      border-color: rgba(168,159,148,.1);
+      text-decoration: line-through;
+      cursor: not-allowed;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green);
+      text-align: center;
+      padding: 1.6rem 5%;
+      font-size: .85rem;
+      color: rgba(240,235,224,.7);
+      letter-spacing: .08em;
+    }
+    footer a { color: rgba(240,235,224,.85); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .slider-track img {
+        flex: 0 0 calc((100% - 12px) / 2);
+        height: 380px;
+      }
+    }
+    @media (max-width: 768px) {
+      #about, #contact { grid-template-columns: 1fr; }
+      .about-img { aspect-ratio: 4/3; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 520px) {
+      .slider-track img {
+        flex: 0 0 100%;
+        height: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">В. Колосов</span>
+  <ul class="nav-links">
+    <li><a href="#about">О себе</a></li>
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#gallery">Галерея</a></li>
+    <li><a href="#contact">Запись</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Профессиональный массаж</p>
+    <h1 class="hero-name">Вячеслав Колосов</h1>
+    <p class="hero-title">Сертифицированный массажист</p>
+    <a href="#contact" class="btn">Записаться на сеанс</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <img class="about-img" src="IMG_7502.JPEG" alt="Вячеслав Колосов">
+  <div class="about-text">
+    <p class="section-label">Обо мне</p>
+    <h2 class="section-title">Забота о вашем теле и душе</h2>
+    <div class="divider"></div>
+    <p>Я — сертифицированный массажист с многолетним опытом работы. Моя цель — помочь каждому клиенту восстановить силы, снять мышечное напряжение и обрести внутренний баланс.</p>
+    <p>Каждый сеанс подбирается индивидуально: я учитываю особенности вашего тела, уровень нагрузок и пожелания, чтобы результат был максимальным.</p>
+    <p>Работаю с профессиональными маслами и проверенными техниками, которые дают ощутимый эффект уже после первого визита.</p>
+    <div class="about-badges">
+      <span class="badge">Сертифицирован</span>
+      <span class="badge">Профессиональные масла</span>
+      <span class="badge">Индивидуальный подход</span>
+      <span class="badge">Комфортная атмосфера</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-label">Услуги и цены</p>
+  <h2 class="section-title">Что я предлагаю</h2>
+  <div class="divider"></div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🌿</div>
+      <p class="service-name">Классический массаж</p>
+      <p class="service-desc">Общеукрепляющий массаж всего тела. Снимает усталость, улучшает кровообращение и тонус мышц.</p>
+      <p class="service-price">от 30 €</p>
+      <p class="service-duration">60 / 90 мин</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <p class="service-name">Спортивный массаж</p>
+      <p class="service-desc">Восстановление после тренировок, работа с мышечными зажимами и подготовка к нагрузкам.</p>
+      <p class="service-price">от 35 €</p>
+      <p class="service-duration">60 / 90 мин</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">✨</div>
+      <p class="service-name">Релакс-массаж</p>
+      <p class="service-desc">Глубокое расслабление, снятие стресса и эмоционального напряжения. Мягкие, успокаивающие техники.</p>
+      <p class="service-price">от 30 €</p>
+      <p class="service-duration">60 / 90 мин</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎯</div>
+      <p class="service-name">Точечный массаж</p>
+      <p class="service-desc">Воздействие на триггерные точки для устранения локальных болей и восстановления функций.</p>
+      <p class="service-price">от 25 €</p>
+      <p class="service-duration">45 / 60 мин</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💆</div>
+      <p class="service-name">Массаж спины и шеи</p>
+      <p class="service-desc">Целевая работа с шейно-воротниковой зоной и спиной. Эффективно при сидячей работе.</p>
+      <p class="service-price">от 20 €</p>
+      <p class="service-duration">30 / 45 мин</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">👑</div>
+      <p class="service-name">VIP-программа</p>
+      <p class="service-desc">Комплексный курс из 5 сеансов с персональной программой, разработанной специально для вас.</p>
+      <p class="service-price">от 120 €</p>
+      <p class="service-duration">Курс 5 сеансов</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <p class="section-label">Галерея</p>
+  <h2 class="section-title">Атмосфера кабинета</h2>
+  <div class="divider"></div>
+  <div class="slider-wrap">
+    <div class="slider-track" id="sliderTrack">
+      <img src="IMG_7321.JPEG" alt="Массаж 1" onclick="openLB(this.src)">
+      <img src="IMG_7322.JPEG" alt="Массаж 2" onclick="openLB(this.src)">
+      <img src="IMG_7323.JPEG" alt="Массаж 3" onclick="openLB(this.src)">
+      <img src="IMG_7324.JPEG" alt="Массаж 4" onclick="openLB(this.src)">
+      <img src="IMG_7325.JPEG" alt="Массаж 5" onclick="openLB(this.src)">
+      <img src="IMG_7326.JPEG" alt="Массаж 6" onclick="openLB(this.src)">
+      <img src="IMG_7335.JPEG" alt="Массаж 7" onclick="openLB(this.src)">
+      <img src="IMG_7336.JPEG" alt="Массаж 8" onclick="openLB(this.src)">
+      <img src="IMG_7338.JPEG" alt="Массаж 9" onclick="openLB(this.src)">
+      <img src="IMG_7339.JPEG" alt="Массаж 10" onclick="openLB(this.src)">
+      <img src="IMG_7340.JPEG" alt="Массаж 11" onclick="openLB(this.src)">
+      <img src="IMG_7341.JPEG" alt="Массаж 12" onclick="openLB(this.src)">
+    </div>
+    <button class="slider-btn slider-prev" onclick="slideMove(-1)">&#8249;</button>
+    <button class="slider-btn slider-next" onclick="slideMove(1)">&#8250;</button>
+  </div>
+  <div class="slider-dots" id="sliderDots"></div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span id="lb-close" onclick="closeLB()">×</span>
+  <button class="lb-nav" id="lb-prev" onclick="lbMove(-1)">&#8249;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav" id="lb-next" onclick="lbMove(1)">&#8250;</button>
+  <span class="lb-counter" id="lb-counter"></span>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info">
+    <p class="section-label">Контакты</p>
+    <h2 class="section-title">Запись на сеанс</h2>
+    <div class="divider"></div>
+    <p>Свяжитесь со мной любым удобным способом или оставьте заявку через форму — я отвечу в течение нескольких часов.</p>
+    <div class="contact-detail">
+      <span class="contact-icon">📞</span>
+      <a href="tel:+7XXXXXXXXXX">+7 (XXX) XXX-XX-XX</a>
+    </div>
+    <div class="contact-detail">
+      <span class="contact-icon">✉️</span>
+      <a href="mailto:info@kolosov.massages">info@kolosov.massages</a>
+    </div>
+    <div class="contact-detail">
+      <span class="contact-icon">🌐</span>
+      <a href="https://www.kolosovmassage.com">www.kolosovmassage.com</a>
+    </div>
+    <div class="contact-detail">
+      <span class="contact-icon">📍</span>
+      <span>Алмело, Нидерланды</span>
+    </div>
+  </div>
+
+  <form onsubmit="handleSubmit(event)">
+    <div>
+      <label>Ваше имя</label>
+      <input type="text" id="f-name" placeholder="Имя и фамилия" required>
+    </div>
+    <div>
+      <label>Телефон</label>
+      <input type="tel" id="f-phone" placeholder="+31 6 __ __ __ __" required>
+    </div>
+    <div>
+      <label>Тип массажа</label>
+      <select id="f-service">
+        <option value="">Выберите услугу</option>
+        <option>Классический массаж</option>
+        <option>Спортивный массаж</option>
+        <option>Релакс-массаж</option>
+        <option>Точечный массаж</option>
+        <option>Массаж спины и шеи</option>
+        <option>VIP-программа</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Выберите дату</label>
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button type="button" class="cal-nav" id="calPrev">&#8249;</button>
+          <span id="calTitle"></span>
+          <button type="button" class="cal-nav" id="calNext">&#8250;</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+
+    <div class="time-wrap" id="timeWrap" style="display:none">
+      <label id="timeLabel">Доступное время</label>
+      <div class="time-grid" id="timeGrid"></div>
+    </div>
+
+    <input type="hidden" id="f-date">
+    <input type="hidden" id="f-time">
+
+    <div>
+      <label>Пожелания</label>
+      <textarea id="f-notes" placeholder="Расскажите о своих пожеланиях или проблемных зонах..."></textarea>
+    </div>
+    <button type="submit" class="btn-submit">Отправить заявку</button>
+    <div id="form-msg" style="display:none;color:var(--gold);text-align:center;padding:.5rem;font-size:.9rem;"></div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Вячеслав Колосов — Сертифицированный массажист &nbsp;|&nbsp; <a href="mailto:info@kolosov.massages">info@kolosov.massages</a></p>
+  <p style="margin-top:.5rem;font-size:.72rem;opacity:.4"><a href="admin.html" style="color:inherit">⚙</a></p>
+</footer>
+
+<script>
+  /* ── EMAILJS CONFIG ── замените на свои ключи с emailjs.com ── */
+  const EJS_PUBLIC_KEY  = 'BPNhutjHyakY1PTdj';
+  const EJS_SERVICE_ID  = 'service_le1nksa';
+  const EJS_TEMPLATE_ID = 'template_or25h3w';
+  emailjs.init({ publicKey: EJS_PUBLIC_KEY });
+
+  /* ── SLIDER ── */
+  const track    = document.getElementById('sliderTrack');
+  const dotsWrap = document.getElementById('sliderDots');
+  const slides   = Array.from(track.querySelectorAll('img'));
+  const total    = slides.length;
+  let cur = 0, startX = 0;
+
+  // Visible count based on viewport
+  function visibleCount() {
+    if (window.innerWidth <= 520) return 1;
+    if (window.innerWidth <= 900) return 2;
+    return 3;
+  }
+
+  // Step width = one image width + gap
+  function stepPct() {
+    const vis = visibleCount();
+    const gapPx = (vis - 1) * 12;            // total gaps between visible items
+    const imgPct = (100 - gapPx / track.parentElement.offsetWidth * 100) / vis;
+    const gapPct  = 12 / track.parentElement.offsetWidth * 100;
+    return imgPct + gapPct;
+  }
+
+  const maxIndex = () => total - visibleCount();
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('span');
+    if (i === 0) d.classList.add('active');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function goTo(n) {
+    cur = Math.max(0, Math.min(n, maxIndex()));
+    track.style.transform = `translateX(-${cur * stepPct()}%)`;
+    dotsWrap.querySelectorAll('span').forEach((d, i) =>
+      d.classList.toggle('active', i === cur));
+  }
+
+  function slideMove(dir) { goTo(cur + dir); }
+
+  window.addEventListener('resize', () => goTo(cur));
+
+  // Touch/swipe
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) slideMove(diff > 0 ? 1 : -1);
+  });
+
+  /* ── LIGHTBOX ── */
+  let lbIndex = 0;
+  const lbImg     = document.getElementById('lb-img');
+  const lbCounter = document.getElementById('lb-counter');
+
+  function openLB(src) {
+    lbIndex = slides.findIndex(img => img.src === src || img.getAttribute('src') === src.split('/').pop());
+    if (lbIndex < 0) lbIndex = slides.findIndex(img => img.src.endsWith(src) || src.endsWith(img.getAttribute('src')));
+    if (lbIndex < 0) lbIndex = 0;
+    showLB();
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function showLB() {
+    lbImg.src = slides[lbIndex].src;
+    lbCounter.textContent = `${lbIndex + 1} / ${total}`;
+  }
+
+  function lbMove(dir) {
+    lbIndex = (lbIndex + dir + total) % total;
+    showLB();
+  }
+
+  function closeLB() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLB();
+  });
+
+  // Keyboard: arrows navigate lightbox if open, else slider
+  document.addEventListener('keydown', e => {
+    const lb = document.getElementById('lightbox');
+    if (lb.classList.contains('open')) {
+      if (e.key === 'ArrowLeft')  lbMove(-1);
+      if (e.key === 'ArrowRight') lbMove(1);
+      if (e.key === 'Escape')     closeLB();
+    } else {
+      if (e.key === 'ArrowLeft')  slideMove(-1);
+      if (e.key === 'ArrowRight') slideMove(1);
+    }
+  });
+
+  /* ── CALENDAR ── */
+  const HOURS = ['9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  const MONTHS_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const DAYS_RU   = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+  let calYear, calMonth, selDate = '', selTime = '';
+
+  function getBooked() {
+    try { return JSON.parse(localStorage.getItem('kolosov_booked') || '{}'); } catch { return {}; }
+  }
+
+  function dateKey(y, m, d) {
+    return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+
+  function renderCal() {
+    const grid  = document.getElementById('calGrid');
+    const title = document.getElementById('calTitle');
+    title.textContent = `${MONTHS_RU[calMonth]} ${calYear}`;
+    grid.innerHTML = '';
+
+    // Day headers (Mon-first)
+    DAYS_RU.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dn';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay(); // 0=Sun
+    const startOffset = (firstDay === 0) ? 6 : firstDay - 1; // Mon-first
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+    const booked = getBooked();
+
+    // Empty cells before 1st
+    for (let i = 0; i < startOffset; i++) {
+      grid.appendChild(document.createElement('div'));
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key  = dateKey(calYear, calMonth, d);
+      const date = new Date(calYear, calMonth, d);
+      const el   = document.createElement('div');
+      el.className = 'cal-d';
+      el.textContent = d;
+
+      const isPast = date < today;
+      if (isPast) {
+        el.classList.add('cal-past');
+      } else {
+        if (date.toDateString() === today.toDateString()) el.classList.add('cal-today');
+        if (key === selDate) el.classList.add('cal-sel');
+        // All slots booked?
+        const dayBooked = booked[key] || [];
+        if (dayBooked.length >= HOURS.length) el.classList.add('cal-full');
+        el.addEventListener('click', () => selectDate(key));
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function selectDate(key) {
+    selDate = key;
+    selTime = '';
+    document.getElementById('f-date').value = key;
+    document.getElementById('f-time').value = '';
+    renderCal();
+    renderTimes();
+  }
+
+  function renderTimes() {
+    const wrap = document.getElementById('timeWrap');
+    const grid = document.getElementById('timeGrid');
+    const lbl  = document.getElementById('timeLabel');
+    const booked = getBooked();
+    const dayBooked = booked[selDate] || [];
+
+    // Format date for label
+    const [y,m,d] = selDate.split('-');
+    lbl.textContent = `Время — ${d}.${m}.${y}`;
+
+    grid.innerHTML = '';
+    HOURS.forEach(h => {
+      const el = document.createElement('div');
+      el.className = 'time-slot';
+      el.textContent = h;
+      if (dayBooked.includes(h)) {
+        el.classList.add('ts-booked');
+      } else {
+        el.addEventListener('click', () => {
+          selTime = h;
+          document.getElementById('f-time').value = h;
+          grid.querySelectorAll('.time-slot').forEach(s => s.classList.remove('ts-sel'));
+          el.classList.add('ts-sel');
+        });
+      }
+      grid.appendChild(el);
+    });
+    wrap.style.display = 'block';
+  }
+
+  // Init calendar
+  (function() {
+    const now = new Date();
+    calYear  = now.getFullYear();
+    calMonth = now.getMonth();
+    renderCal();
+    document.getElementById('calPrev').addEventListener('click', () => {
+      const now = new Date(); now.setHours(0,0,0,0);
+      const prev = new Date(calYear, calMonth - 1, 1);
+      if (prev >= new Date(now.getFullYear(), now.getMonth(), 1)) {
+        calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+        renderCal();
+      }
+    });
+    document.getElementById('calNext').addEventListener('click', () => {
+      calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+      renderCal();
+    });
+  })();
+
+  /* ── FORM ── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const date    = document.getElementById('f-date').value;
+    const time    = document.getElementById('f-time').value;
+    const name    = document.getElementById('f-name').value;
+    const phone   = document.getElementById('f-phone').value;
+    const service = document.getElementById('f-service').value;
+    const notes   = document.getElementById('f-notes').value;
+
+    if (!date) { alert('Пожалуйста, выберите дату.'); return; }
+    if (!time) { alert('Пожалуйста, выберите время.'); return; }
+
+    const msg = document.getElementById('form-msg');
+    const submitBtn = e.target.querySelector('.btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправка...';
+
+    const dateFormatted = date.split('-').reverse().join('.');
+
+    emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, {
+      client_name:    name,
+      client_phone:   phone,
+      service_type:   service || 'не указана',
+      booking_date:   dateFormatted,
+      booking_time:   time,
+      client_notes:   notes || '—',
+    })
+    .then(() => {
+      // Block slot on success
+      const booked = getBooked();
+      const arr = booked[date] || [];
+      if (!arr.includes(time)) {
+        booked[date] = [...arr, time];
+        localStorage.setItem('kolosov_booked', JSON.stringify(booked));
+      }
+      msg.style.display = 'block';
+      msg.style.color = 'var(--gold)';
+      msg.textContent = `✓ Заявка принята! ${dateFormatted} в ${time}. Я свяжусь с вами для подтверждения.`;
+      e.target.reset();
+      selDate = ''; selTime = '';
+      document.getElementById('timeWrap').style.display = 'none';
+      renderCal();
+    })
+    .catch(() => {
+      msg.style.display = 'block';
+      msg.style.color = 'var(--red, #e05555)';
+      msg.textContent = 'Ошибка отправки. Пожалуйста, свяжитесь напрямую по телефону.';
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить заявку';
+    });
+  }
+</script>
+
+</body>
+</html>
